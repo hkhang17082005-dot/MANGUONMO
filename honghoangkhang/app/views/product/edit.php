@@ -3,87 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa sản phẩm</title>
+    <title>Sửa sản phẩm | HUTECH Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fff8f0; }
+        .form-container { max-width: 600px; margin: 50px auto; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .btn-warning { color: #fff; background-color: #f39c12; border: none; }
+        .btn-warning:hover { background-color: #e67e22; color: #fff; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Cửa hàng HUTECH</a>
-        </div>
-    </nav>
-
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="mb-4">Sửa sản phẩm</h1>
-
-                <?php if (!empty($errors)): ?>
-                    <div class="alert alert-danger">
-                        <h5>Vui lòng kiểm tra:</h5>
-                        <ul class="mb-0">
-                            <?php foreach ($errors as $error): ?>
-                                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+    <div class="container">
+        <div class="form-container">
+            <div class="card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="icon-box bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-edit fa-lg"></i>
                     </div>
-                <?php endif; ?>
+                    <h2 class="fw-bold">Chỉnh sửa</h2>
+                    <p class="text-muted small">Đang cập nhật: <strong><?php echo htmlspecialchars($product->getName(), ENT_QUOTES, 'UTF-8'); ?></strong></p>
+                </div>
 
-                <form method="POST" action="<?php echo BASE_URL; ?>Product/edit/<?php echo $product->getID(); ?>" onsubmit="return validateForm();">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Tên sản phẩm:</label>
+                <form method="POST" action="<?php echo BASE_URL; ?>Product/edit/<?php echo $product->getID(); ?>">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Tên sản phẩm</label>
                         <input type="text" class="form-control" id="name" name="name" 
-                               value="<?php echo htmlspecialchars($product->getName(), ENT_QUOTES, 'UTF-8'); ?>" 
-                               placeholder="Nhập tên sản phẩm" required>
-                        <small class="form-text text-muted">Tối thiểu 10 ký tự, tối đa 100 ký tự</small>
+                               value="<?php echo htmlspecialchars($product->getName(), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Mô tả:</label>
-                        <textarea class="form-control" id="description" name="description" 
-                                  rows="4" placeholder="Nhập mô tả sản phẩm" required><?php echo htmlspecialchars($product->getDescription(), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Mô tả</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required><?php echo htmlspecialchars($product->getDescription(), ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Giá:</label>
-                        <input type="number" class="form-control" id="price" name="price" 
-                               value="<?php echo htmlspecialchars($product->getPrice(), ENT_QUOTES, 'UTF-8'); ?>" 
-                               placeholder="Nhập giá" step="0.01" required>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Giá niêm yết</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="price" name="price" step="0.01"
+                                   value="<?php echo htmlspecialchars($product->getPrice(), ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
                     </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-warning">Lưu thay đổi</button>
-                    </div>
-
-                    <div class="mt-3 text-center">
-                        <a href="<?php echo BASE_URL; ?>Product/list" class="btn btn-secondary">Quay lại danh sách</a>
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-warning btn-lg rounded-pill fw-bold">Lưu thay đổi</button>
+                        <a href="<?php echo BASE_URL; ?>Product/list" class="btn btn-link text-decoration-none text-muted">Quay lại danh sách</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <script>
-        function validateForm() {
-            let name = document.getElementById('name').value;
-            let price = document.getElementById('price').value;
-            let errors = [];
-
-            if (name.length < 10 || name.length > 100) {
-                errors.push('Tên sản phẩm phải có từ 10 đến 100 ký tự.');
-            }
-
-            if (price <= 0 || isNaN(price)) {
-                errors.push('Giá phải là một số dương lớn hơn 0.');
-            }
-
-            if (errors.length > 0) {
-                alert(errors.join('\n'));
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 </body>
 </html>
