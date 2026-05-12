@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/project1/">Cửa hàng HUTECH</a>
+            <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Cửa hàng HUTECH</a>
         </div>
     </nav>
 
@@ -29,7 +29,7 @@
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="/project1/Product/add" onsubmit="return validateForm();">
+                <form method="POST" action="<?php echo BASE_URL; ?>Product/add" onsubmit="return validateForm();">
                     <div class="mb-3">
                         <label for="name" class="form-label">Tên sản phẩm:</label>
                         <input type="text" class="form-control" id="name" name="name" 
@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <a href="/project1/Product/list" class="btn btn-secondary">Quay lại danh sách</a>
+                        <a href="<?php echo BASE_URL; ?>Product/list" class="btn btn-secondary">Quay lại danh sách</a>
                     </div>
                 </form>
             </div>
@@ -83,7 +83,5 @@
             return true;
         }
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

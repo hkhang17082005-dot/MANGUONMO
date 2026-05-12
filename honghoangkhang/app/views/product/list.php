@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/project1/">Cửa hàng HUTECH</a>
+            <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Cửa hàng HUTECH</a>
         </div>
     </nav>
 
@@ -19,13 +19,13 @@
                 <h1>Danh sách sản phẩm</h1>
             </div>
             <div class="col-md-6 text-end">
-                <a href="/project1/Product/add" class="btn btn-success">+ Thêm sản phẩm mới</a>
+                <a href="<?php echo BASE_URL; ?>Product/add" class="btn btn-success">+ Thêm sản phẩm mới</a>
             </div>
         </div>
 
         <?php if (empty($products)): ?>
             <div class="alert alert-info">
-                Chưa có sản phẩm nào. <a href="/project1/Product/add">Thêm sản phẩm mới</a>
+                Chưa có sản phẩm nào. <a href="<?php echo BASE_URL; ?>Product/add">Thêm sản phẩm mới</a>
             </div>
         <?php else: ?>
             <div class="row">
@@ -40,8 +40,8 @@
                                 </p>
                             </div>
                             <div class="card-footer bg-white">
-                                <a href="/project1/Product/edit/<?php echo $product->getID(); ?>" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="/project1/Product/delete/<?php echo $product->getID(); ?>" class="btn btn-danger btn-sm" 
+                                <a href="<?php echo BASE_URL; ?>Product/edit/<?php echo $product->getID(); ?>" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="<?php echo BASE_URL; ?>Product/delete/<?php echo $product->getID(); ?>" class="btn btn-danger btn-sm" 
                                    onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
                             </div>
                         </div>
@@ -50,7 +50,5 @@
             </div>
         <?php endif; ?>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

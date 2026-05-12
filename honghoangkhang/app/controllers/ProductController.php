@@ -2,22 +2,25 @@
 class ProductController
 {
     private $products = [];
+    
     public function __construct()
     {
-        // Giả sử chúng ta lưu trữ sản phẩm trong session để giữ lại khi làm mới trang
         if (isset($_SESSION['products'])) {
             $this->products = $_SESSION['products'];
         }
     }
+    
     public function index()
     {
         $this->list();
     }
+    
     public function list()
     {
         $products = $this->products;
         include 'app/views/product/list.php';
     }
+    
     public function add()
     {
         $errors = [];
@@ -26,14 +29,12 @@ class ProductController
             $description = $_POST['description'];
             $price = $_POST['price'];
             
-            // Kiểm tra tên sản phẩm
             if (empty($name)) {
                 $errors[] = 'Tên sản phẩm là bắt buộc.';
             } elseif (strlen($name) < 10 || strlen($name) > 100) {
                 $errors[] = 'Tên sản phẩm phải có từ 10 đến 100 ký tự.';
             }
             
-            // Kiểm tra giá
             if (!is_numeric($price) || $price <= 0) {
                 $errors[] = 'Giá phải là một số dương lớn hơn 0.';
             }
@@ -43,27 +44,49 @@ class ProductController
                 $product = new ProductModel($id, $name, $description, $price);
                 $this->products[] = $product;
                 $_SESSION['products'] = $this->products;
-                header('Location: /project1/Product/list');
+                // Sử dụng BASE_URL thay vì /project1/
+                header('Location: ' . BASE_URL . 'Product/list');
                 exit();
             }
         }
         include 'app/views/product/add.php';
     }
+    
     public function edit($id)
     {
+        $errors = []; // Thêm biến lưu lỗi
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            foreach ($this->products as $key => $product) {
-                if ($product->getID() == $id) {
-                    $this->products[$key]->setName($_POST['name']);
-                    $this->products[$key]->setDescription($_POST['description']);
-                    $this->products[$key]->setPrice($_POST['price']);
-                    break;
-                }
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            $price = $_POST['price'];
+
+            // Bổ sung Validation cho chức năng Sửa giống như Thêm mới
+            if (empty($name)) {
+                $errors[] = 'Tên sản phẩm là bắt buộc.';
+            } elseif (strlen($name) < 10 || strlen($name) > 100) {
+                $errors[] = 'Tên sản phẩm phải có từ 10 đến 100 ký tự.';
             }
-            $_SESSION['products'] = $this->products;
-            header('Location: /project1/Product/list');
-            exit();
+            
+            if (!is_numeric($price) || $price <= 0) {
+                $errors[] = 'Giá phải là một số dương lớn hơn 0.';
+            }
+
+            if (empty($errors)) {
+                foreach ($this->products as $key => $product) {
+                    if ($product->getID() == $id) {
+                        $this->products[$key]->setName($name);
+                        $this->products[$key]->setDescription($description);
+                        $this->products[$key]->setPrice($price);
+                        break;
+                    }
+                }
+                $_SESSION['products'] = $this->products;
+                header('Location: ' . BASE_URL . 'Product/list');
+                exit();
+            }
         }
+        
         foreach ($this->products as $product) {
             if ($product->getID() == $id) {
                 include 'app/views/product/edit.php';
@@ -72,6 +95,7 @@ class ProductController
         }
         die('Product not found');
     }
+    
     public function delete($id)
     {
         foreach ($this->products as $key => $product) {
@@ -82,7 +106,7 @@ class ProductController
         }
         $this->products = array_values($this->products);
         $_SESSION['products'] = $this->products;
-        header('Location: /project1/Product/list');
+        header('Location: ' . BASE_URL . 'Product/list');
         exit();
     }
 }

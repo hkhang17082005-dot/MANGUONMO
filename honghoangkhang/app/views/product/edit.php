@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/project1/">Cửa hàng HUTECH</a>
+            <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Cửa hàng HUTECH</a>
         </div>
     </nav>
 
@@ -18,12 +18,24 @@
             <div class="col-md-6">
                 <h1 class="mb-4">Sửa sản phẩm</h1>
 
-                <form method="POST" action="/project1/Product/edit/<?php echo $product->getID(); ?>">
+                <?php if (!empty($errors)): ?>
+                    <div class="alert alert-danger">
+                        <h5>Vui lòng kiểm tra:</h5>
+                        <ul class="mb-0">
+                            <?php foreach ($errors as $error): ?>
+                                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="<?php echo BASE_URL; ?>Product/edit/<?php echo $product->getID(); ?>" onsubmit="return validateForm();">
                     <div class="mb-3">
                         <label for="name" class="form-label">Tên sản phẩm:</label>
                         <input type="text" class="form-control" id="name" name="name" 
                                value="<?php echo htmlspecialchars($product->getName(), ENT_QUOTES, 'UTF-8'); ?>" 
                                placeholder="Nhập tên sản phẩm" required>
+                        <small class="form-text text-muted">Tối thiểu 10 ký tự, tối đa 100 ký tự</small>
                     </div>
 
                     <div class="mb-3">
@@ -44,13 +56,34 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <a href="/project1/Product/list" class="btn btn-secondary">Quay lại danh sách</a>
+                        <a href="<?php echo BASE_URL; ?>Product/list" class="btn btn-secondary">Quay lại danh sách</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validateForm() {
+            let name = document.getElementById('name').value;
+            let price = document.getElementById('price').value;
+            let errors = [];
+
+            if (name.length < 10 || name.length > 100) {
+                errors.push('Tên sản phẩm phải có từ 10 đến 100 ký tự.');
+            }
+
+            if (price <= 0 || isNaN(price)) {
+                errors.push('Giá phải là một số dương lớn hơn 0.');
+            }
+
+            if (errors.length > 0) {
+                alert(errors.join('\n'));
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>

@@ -1,7 +1,10 @@
 <?php
-
-session_start();
+// BẮT BUỘC: Phải nạp Model trước khi khởi động session để PHP biết ProductModel là gì
 require_once 'app/models/ProductModel.php';
+session_start();
+
+// Định nghĩa đường dẫn gốc để không bị lỗi 404 khi chuyển trang
+define('BASE_URL', '/honghoangkhang/'); 
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
@@ -14,11 +17,8 @@ $controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controll
 // Kiểm tra phần thứ hai của URL để xác định action
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 
-// die ("controller=$controllerName - action=$action");
-
 // Kiểm tra xem controller và action có tồn tại không
 if (!file_exists('app/controllers/' . $controllerName . '.php')) {
-    // Xử lý không tìm thấy controller
     die('Controller not found');
 }
 
@@ -27,7 +27,6 @@ require_once 'app/controllers/' . $controllerName . '.php';
 $controller = new $controllerName();
 
 if (!method_exists($controller, $action)) {
-    // Xử lý không tìm thấy action
     die('Action not found');
 }
 
